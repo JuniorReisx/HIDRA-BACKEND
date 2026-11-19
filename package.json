@@ -1,7 +1,7 @@
 {
-  "name": "kaio-sihs-assistant-api",
+  "name": "hidra-ia-api",
   "version": "1.0.0",
-  "description": "API do Kaio, assistente virtual do Portal da Água da SIHS Bahia.",
+  "description": "API da HIDRA, assistente de inteligência hídrica da SIHS Bahia.",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/server.js",
