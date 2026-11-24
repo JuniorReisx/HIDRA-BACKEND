@@ -37,7 +37,7 @@ async function carregarNomes() {
     returnDistinctValues: "true",
     returnGeometry: "false",
     f: "json",
-  });
+  }, "carregarNomes");
   const mapa = new Map();
   for (const feature of data.features || []) {
     const valor = limparEspacos(feature.attributes?.[config.campo]);
@@ -58,13 +58,22 @@ async function geometriaDoMunicipio(nome) {
     returnGeometry: "true",
     outSR: "4674",
     f: "json",
-  });
+  }, "geometriaDoMunicipio");
   return data.features?.[0]?.geometry || null;
 }
 
-async function consultarMunicipios(config, params) {
+async function consultarMunicipios(config, params, etapa) {
   const corpo = new URLSearchParams(params);
   if (config.token) corpo.set("token", config.token);
+  const contexto = {
+    etapa,
+    hostname: hostnameDe(config.url),
+    campo: config.campo,
+    returnDistinctValues: params.returnDistinctValues || "false",
+    returnGeometry: params.returnGeometry || "false",
+  };
+  const inicio = Date.now();
+  console.log("[arcgis] limite inicio", contexto);
 
   let response;
   try {
@@ -74,9 +83,15 @@ async function consultarMunicipios(config, params) {
       body: corpo,
       signal: AbortSignal.timeout(config.timeoutMs),
     });
-  } catch {
-    throw Object.assign(new Error("Falha ao consultar o limite municipal."), { codigo: "FONTE_INDISPONIVEL" });
+  } catch (error) {
+    const tipo = error.name || "Error";
+    const causa = error.cause?.code || error.cause?.name || "";
+    console.warn("[arcgis] limite erro", { ...contexto, ms: Date.now() - inicio, status: null, tipo, causa });
+    throw Object.assign(new Error(`Falha ao consultar o limite municipal (${tipo}${causa ? ` ${causa}` : ""}).`), {
+      codigo: "FONTE_INDISPONIVEL",
+    });
   }
+  console.log("[arcgis] limite fim", { ...contexto, ms: Date.now() - inicio, status: response.status });
   if (!response.ok) {
     throw Object.assign(new Error("A camada de municípios não respondeu."), { codigo: "FONTE_INDISPONIVEL" });
   }
@@ -86,6 +101,14 @@ async function consultarMunicipios(config, params) {
     throw Object.assign(new Error("A camada de municípios recusou a consulta."), { codigo: "FONTE_INDISPONIVEL" });
   }
   return data;
+}
+
+function hostnameDe(url) {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return "invalida";
+  }
 }
 
 function chave(valor) {
