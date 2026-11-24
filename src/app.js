@@ -3,6 +3,7 @@ import cors from "cors";
 import basesRoutes from "./routes/basesRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import hidraRoutes from "./routes/hidra.routes.js";
+import diagnosticoRoutes from "./routes/diagnostico.routes.js";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use("/api", basesRoutes);
 app.use("/api", chatRoutes);
 app.use("/api", hidraRoutes);
+app.use("/api", diagnosticoRoutes);
 
 function opcoesCors() {
   const configuradas = String(process.env.FRONTEND_URL || "")
