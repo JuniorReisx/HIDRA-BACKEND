@@ -24,7 +24,7 @@ export function perguntaOperacionalDePocos(pergunta) {
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
   const sobrePocos = /\bpocos?\b/.test(texto);
-  const pedeDado = /quantos|quantas|liste|lista|quais|mostre|quantidade/.test(texto);
+  const pedeDado = /quantos|quantas|liste|lista|quais|mostre|quantidade|quero|preciso|busco|filtre|filtrar|profundidade|vazao|minima|maxima|maior|menor|pelo menos|no minimo|no maximo/.test(texto);
   return sobrePocos && pedeDado;
 }
 

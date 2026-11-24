@@ -32,6 +32,8 @@ Regras:
 ${ATRIBUTOS}
 - municipio não entra em filtros.
 - VAZÃO APROVEITÁVEL é valor de condicao, nunca de vazao. vazao e profundidade são números.
+- Profundidade ou vazão mínima, no mínimo, pelo menos ou a partir de um número usa maior_ou_igual. Máxima, no máximo ou até um número usa menor_ou_igual.
+- "Quero poços com" um filtro numérico, sem pedir nomes, é acao contar. Peça listar somente quando a pessoa pedir nomes, lista ou quais poços.
 - Não substitua uma classificação por outra. Se a pessoa pedir inativo, operacional ou paralisado, devolva esse termo em filtros com atributo condicao e operador igual.
 - limite é o número pedido na listagem, ou null.
 - Não calcule quantidades, não invente registros e não devolva nomes de campos, SQL, WHERE ou URL.
